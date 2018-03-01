@@ -73,6 +73,60 @@ app.get('/todos/:id',(req,res) => {
     console.log(e);
 });
 
+
+app.delete('/todos/:id', (req, res) => {
+    // get the id
+    var id = req.params.id;
+    //res.send(ObjectID.isValid(id));
+    
+    if(ObjectID.isValid(id)){
+        
+        // delete document by id
+        
+        Todo.findByIdAndRemove(id).then((todo) => {
+            if(!todo){
+                res.status(404).send({todo});
+            } else {
+                res.status(200).send({todo});
+            }
+
+        }).catch((e) => {
+            res.status(400).send();
+        });
+        
+        
+    } else {
+        //res.send('hi');
+        res.status(404).send('Invalid ID');
+    }
+    
+//    if(ObjectID.isValid(id)){
+////        Todo.findByIdAndremove({_id: id}).then((todo)=> {
+////            if(todo){
+////                res.status(200).send({todo});
+////            } else {
+////                res.status(404).send('Valid ID but no doc', id);
+////            }
+////            
+////        }).catch((e) => {
+////            res.status(400).send('Caught error trying to remove ', e);
+////        });
+//        
+//    } else {
+//        res.status(404);
+//    }
+    
+    // validate the id
+
+    // if it's not valid, return 404
+    
+    // remove todo by ID
+    
+        // success, check if doc came back, if doc send back doc with 200, if no doc, send 404
+    
+        // error, send 400 with empty body
+});
+
 app.listen(port, () => {
     console.log(`Started on port ${port}`);
 });
