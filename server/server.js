@@ -50,7 +50,7 @@ app.get('/todos/:id',(req,res) => {
         })
         .then((todo) =>{
             if(todo) {
-                res.status(200).send(JSON.stringify(todo, undefined, 2));
+                res.status(200).send({todo});
             } else {
                 res.status(404).send('id valid but todo not found');
             }
