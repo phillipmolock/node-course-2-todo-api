@@ -77,29 +77,22 @@ app.get('/todos/:id',(req,res) => {
 app.delete('/todos/:id', (req, res) => {
     // get the id
     var id = req.params.id;
-    //res.send(ObjectID.isValid(id));
     
-    if(ObjectID.isValid(id)){
-        
-        // delete document by id
-        
-        Todo.findByIdAndRemove(id).then((todo) => {
-            if(!todo){
-                res.status(404).send({todo});
-            } else {
-                res.status(200).send({todo});
-            }
-
-        }).catch((e) => {
-            res.status(400).send();
-        });
-        
-        
-    } else {
-        //res.send('hi');
-        res.status(404).send('Invalid ID');
+    if (!ObjectID.isValid(id)){
+        return res.status(404).send();
     }
     
+    Todo.findByIdAndRemove(id).then((todo) => {
+        if (!todo){
+            return res.status(404).send();
+        }
+        
+        res.send({todo});
+        
+    }).catch((e) => {
+        res.status(400).send();
+    });
+
 //    if(ObjectID.isValid(id)){
 ////        Todo.findByIdAndremove({_id: id}).then((todo)=> {
 ////            if(todo){
