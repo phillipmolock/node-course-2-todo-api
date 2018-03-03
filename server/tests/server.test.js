@@ -7,23 +7,10 @@ const {ObjectID} = require('mongodb');
 // local 
 const {app} = require('./../server');
 const {Todo} = require('./../models/todo');
+const {todos, populateTodos, users, populateUsers} = require('./seed/seed');
 
-// dummy array to fill todos after clearing
-const todos = [{
-    _id: new ObjectID(),
-    text: 'first test todo'
-},{
-    _id: new ObjectID(),
-    text: 'second test todo',
-    completed: true,
-    completedAt: 333
-}];
-
-beforeEach((done) => {
-   Todo.remove({}).then(() => {
-       return Todo.insertMany(todos);
-   }).then(() => done()); 
-});
+beforeEach(populateUsers);
+beforeEach(populateTodos);
 
 describe('POST /todos', () => {
     it('should create a new todo',(done) =>{
