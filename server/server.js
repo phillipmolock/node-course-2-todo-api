@@ -10,6 +10,7 @@ const _ = require('lodash');
 var {mongoose} = require('./db/mongoose');
 var {Todo} = require('./models/todo');
 var {User} = require('./models/user');
+var {authenticate} = require('./middleware/authenticate');
 
 
 // app
@@ -174,6 +175,16 @@ app.post('/users', (req, res) => {
     });
     
 });
+
+// private routes
+
+app.get('/users/me', authenticate, (req,res) =>{
+    res.send(req.user);
+});
+
+// create private route middle ware
+
+
 
 //app.post('/todos', (req, res) => {
 //    console.log(req.body);

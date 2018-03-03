@@ -55,6 +55,26 @@ UserSchema.methods.generateAuthToken = function () {
 
 };
 
+// statics = model methods instead of instance, instance get called with actual document as this binding, model get called with the model as the this binding
+
+UserSchema.statics.findByToken = function (token) {
+    var User = this;
+    var decoded;
+    
+    try {
+        decoded = jwt.verify(token, 'abc123');
+    } catch (e) {
+        return Promise.reject(); // this will reject promise causing the .catch to catch an error and return a 401 (meaning that the token was invalid)
+    }
+    
+    return User.findOne({
+        // need quotes to do .notation
+        '_id': decoded._id,
+        'tokens.token': token,
+        'tokens.access': 'auth'        
+    });
+};
+
 var User = mongoose.model('User', UserSchema);
 
 module.exports = {
