@@ -151,6 +151,42 @@ app.patch('/todos/:id', (req, res) => {
     });
 });
 
+
+// POST /users
+
+app.post('/users', (req, res) => {
+    // read body of response for email/pass/tokens
+    var body = _.pick(req.body, ['email', 'password']);
+    
+    //create new user object with emali/pass/tokens
+    
+    var user = new User(body);
+    
+    console.log(user);
+    
+    user.save().then(() => {
+       return user.generateAuthToken();
+        //res.send(user); 
+    }).then((token)=> {
+        res.header('x-auth', token).send(user);
+    }).catch((e) => {
+        res.status(400).send(e);
+    });
+    
+});
+
+//app.post('/todos', (req, res) => {
+//    console.log(req.body);
+//    var todo = new Todo({
+//        text: req.body.text
+//    });
+//    todo.save().then((doc) => {
+//        res.send(doc);
+//    },(e)=>{
+//        res.status(400).send(e);
+//    });
+//});
+
 app.listen(port, () => {
     console.log(`Started on port ${port}`);
 });
